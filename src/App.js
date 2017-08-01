@@ -9,6 +9,7 @@ class App extends Component {
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.toggleShowGallery = this.toggleShowGallery.bind(this);
     this.updateIndex = this.updateIndex.bind(this);
+    this.width = 1000;
     this.state= {
       photos: [],
       isShowGallery: true,
@@ -19,7 +20,16 @@ class App extends Component {
     fetch('https://jsonplaceholder.typicode.com/photos')
       .then(raw => raw.json())
       .then(photos => {
-        this.setState({ photos: photos.slice(100, 110) });
+        const adjustedPhotos = photos.slice(100, 110).map(({albumId, id, title, url, thumbnailUrl}) => {
+          return {
+            albumId,
+            id,
+            title,
+            url: url.replace(/\/([0-9]{3})\//g, `/${this.width}x600/`),
+            thumbnailUrl
+          }
+        });
+        this.setState({ photos: adjustedPhotos });
       })
   }
   componentDidMount() {
@@ -58,7 +68,7 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
-        {isShowGallery ? <Gallery photos={photos} updateIndex={this.updateIndex} currentItem={index}/> : null}
+        {isShowGallery ? <Gallery photos={photos} updateIndex={this.updateIndex} currentItem={index} width={this.width}/> : null}
         
         <button onClick={this.toggleShowGallery}>Toggle Gallery</button>    
       </div>

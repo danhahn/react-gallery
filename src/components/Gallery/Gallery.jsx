@@ -9,8 +9,7 @@ class Gallery extends Component {
     this.updatePhotoDisplay = this.updatePhotoDisplay.bind(this);
     this.state= {
       photos: [],
-      currentItem: 0,
-      width: 600,   
+      currentItem: 0
     };
   } 
   componentDidMount() {
@@ -36,15 +35,14 @@ class Gallery extends Component {
   updatePhotoDisplay(offSet) {
     const {
       width
-    } = this.state;
+    } = this.props;
     this.photoBox.style.marginLeft = `-${width * offSet}px`;    
   }
   slideLeft() {
     const {
       currentItem,
-      width
     } = this.state;
-    const { photos } = this.props;
+    const { photos, width } = this.props;
     const nextItem = currentItem < photos.length -1 ? currentItem + 1 : 0;
     this.photoBox.style.marginLeft = `-${width * nextItem}px`;
     this.setState({currentItem: nextItem});
@@ -53,9 +51,8 @@ class Gallery extends Component {
   slideRight() {
     const {
       currentItem,
-      width
     } = this.state;
-    const { photos } = this.props;    
+    const { photos, width } = this.props;    
     const nextItem = currentItem > 0 ? currentItem - 1 : photos.length -1;
     this.photoBox.style.marginLeft = `-${width * nextItem}px`;
     this.setState({currentItem: nextItem});
@@ -64,12 +61,13 @@ class Gallery extends Component {
   render() {
     const {
       photos,
+      width
     } = this.props;
     const { currentItem } = this.state;
     return (
       <div>
         <p>{`${currentItem} ${photos.length}`}</p>
-        <div className="photos" style={{width: 600, overflow: 'hidden', margin: '0 auto'}}>
+        <div className="photos" style={{width, overflow: 'hidden', margin: '0 auto'}}>
           <div 
             className="photos__items" 
             style={{display: 'flex'}}
@@ -90,7 +88,7 @@ class Gallery extends Component {
                     textAlign: 'center',
                     margin: 0                  
                   }
-                }>{i}</p>
+                }>{photo.title}</p>
               </div>
             ))}
           </div>       
@@ -120,7 +118,8 @@ Gallery.defaultProps = {
     }
   ],
   updateIndex: (index) => console.log(index),
-  currentItem: 0
+  currentItem: 0,
+  width: 600
 };
 
 export default Gallery;
